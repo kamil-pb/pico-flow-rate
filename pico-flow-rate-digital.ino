@@ -60,8 +60,8 @@ void loop() {
         unsigned long currentTimeMs = millis();
         periodMs = currentTimeMs - lastDetectionMs;
 
-        // Compute flow rate and convert to lbs/min.
-        flowRateMlPerMin = PUMP_VOLUME_ML / periodMs * 1000 * 60;
+        // Compute flow rate and convert to mL/min.
+        flowRateMlPerMin = PUMP_VOLUME_ML / periodMs * 1000.0 * 60.0;
         lastDetectionMs = currentTimeMs;
       }
 
