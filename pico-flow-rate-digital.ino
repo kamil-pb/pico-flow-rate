@@ -72,13 +72,13 @@ void loop() {
     lastDetectionMs = currentTimeMs;
 
     // Compute flow rate and convert to mL/min.
-    flowRateMlPerMin = PUMP_VOLUME_ML / periodMs * 1000.0 * 60.0;
+    flowRateMlPerMin = 60000.0 * PUMP_VOLUME_ML / periodMs;
   }
 
   // Display the value on the OLED.
   display.clear();
   display.drawString(0, 0, "Flow Rate (mL/min): " + String(flowRateMlPerMin));
-  display.drawString(0, 8, "RPM: " + String(1000.0 / periodMs * 60));
-  display.drawString(0, 16, "Sensor Value: " + String(value));
+  display.drawString(0, 8, "RPM: " + String(60000.0 / periodMs));
+  display.drawString(0, 16, "Sensor Value: " + String(!active));
   display.display();
 }
