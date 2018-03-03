@@ -5,10 +5,6 @@
 #define PUMP_VOLUME_ML 0.285
 
 // Program state enumerations.
-// MAGNET_NOT_PRESENT
-//     --> MAGNET_PRESENT
-//     --> MAGNET_PRESENT_HOLD
-//     --> MAGNET_NOT_PRESENT
 typedef enum {
   MAGNET_NOT_PRESENT,
   MAGNET_PRESENT,
@@ -55,14 +51,6 @@ void loop() {
     case MAGNET_NOT_PRESENT:
       if (active) {
         state = MAGNET_PRESENT;
-
-        // Compute pump rotation period.
-        unsigned long currentTimeMs = millis();
-        periodMs = currentTimeMs - lastDetectionMs;
-        lastDetectionMs = currentTimeMs;
-
-        // Compute flow rate and convert to mL/min.
-        flowRateMlPerMin = PUMP_VOLUME_ML / periodMs * 1000.0 * 60.0;
       }
 
       break;
@@ -77,6 +65,16 @@ void loop() {
       break;
   }
 
+  if (state == MAGNET_PRESENT) {
+    // Compute pump rotation period.
+    unsigned long currentTimeMs = millis();
+    periodMs = currentTimeMs - lastDetectionMs;
+    lastDetectionMs = currentTimeMs;
+
+    // Compute flow rate and convert to mL/min.
+    flowRateMlPerMin = PUMP_VOLUME_ML / periodMs * 1000.0 * 60.0;
+  }
+
   // Display the value on the OLED.
   display.clear();
   display.drawString(0, 0, "Flow Rate (mL/min): " + String(flowRateMlPerMin));
@@ -84,4 +82,3 @@ void loop() {
   display.drawString(0, 16, "Sensor Value: " + String(value));
   display.display();
 }
-
