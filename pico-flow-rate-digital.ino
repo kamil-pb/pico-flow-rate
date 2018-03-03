@@ -59,10 +59,10 @@ void loop() {
         // Compute pump rotation period.
         unsigned long currentTimeMs = millis();
         periodMs = currentTimeMs - lastDetectionMs;
+        lastDetectionMs = currentTimeMs;
 
         // Compute flow rate and convert to mL/min.
         flowRateMlPerMin = PUMP_VOLUME_ML / periodMs * 1000.0 * 60.0;
-        lastDetectionMs = currentTimeMs;
       }
 
       break;
