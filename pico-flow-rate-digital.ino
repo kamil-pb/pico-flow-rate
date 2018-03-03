@@ -31,7 +31,7 @@ double flowRateMlPerMin;
 unsigned long periodMs;
 
 void setup() {
-  Serial.begin(115200);
+  // Initialize pin 16 for input.
   pinMode(16, INPUT);
 
   // Initialize display.
@@ -48,12 +48,12 @@ void setup() {
 
 void loop() {
   // The sensor is active low.
-  int value = digitalRead(16);
+  int active = !digitalRead(16);
 
   // Determine if a state transition should occur.
   switch (state) {
     case MAGNET_NOT_PRESENT:
-      if (!value) {
+      if (active) {
         state = MAGNET_PRESENT;
 
         // Compute pump rotation period.
@@ -68,7 +68,7 @@ void loop() {
       break;
     case MAGNET_PRESENT:
     case MAGNET_PRESENT_HOLD:
-      if (!value) {
+      if (active) {
         state = MAGNET_PRESENT_HOLD;
       } else {
         state = MAGNET_NOT_PRESENT;
@@ -83,8 +83,5 @@ void loop() {
   display.drawString(0, 8, "RPM: " + String(1000.0 / periodMs * 60));
   display.drawString(0, 16, "Sensor Value: " + String(value));
   display.display();
-
-  // Display the value on the serial monitor.
-  Serial.println(value);
 }
 
